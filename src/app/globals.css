@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+
+/* In your CSS file */
+.button-block {
+  background-color: #ff1930; /* Red */
+}
+
+.button-unblock {
+  background-color: #28a745; /* Green */
+}
+
+.button-block:hover {
+  background-color: #c82333; /* Darker red */
+}
+
+.button-unblock:hover {
+  background-color: #218838; /* Darker green */
+}
+
+
+/* folder icon */
+
+.icon{
+  position: absolute;
+width: 39.87px;
+height: 36.92px;
+left: 349.26px;
+top: 283px;
+
+transform: rotate(0.41deg);
+}
