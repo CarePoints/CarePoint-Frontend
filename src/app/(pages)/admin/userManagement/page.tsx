@@ -1,9 +1,9 @@
-import Header from '../components/header/header'
+import CustomHeader from '../components/header/CustomHeader'
 import UserManagement from './components/UserManagement'
 const page = () => {
   return (
     <div>
-        <Header/>
+        <CustomHeader currentPage="users" />
         <UserManagement/>
     </div>
   )

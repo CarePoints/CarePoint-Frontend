@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import StatusDropdown from "./Dropdown/StatusDropdown";
-import DateFilterDropdown from "./Dropdown/DateFilterDropdown";
-import ToggleButton from "./ToggleButton";
+import StatusDropdown from "../../components/Dropdown/StatusDropdown";
+import DateFilterDropdown from "../../components/Dropdown/DateFilterDropdown";
+import ToggleButton from "../../components/ToggleButton/ToggleButton";
 import Image from "next/image";
 import Folder from "../../../../../../public/images/folder-icon.png";
 import axiosInstance from "@/app/hooks/useApi";

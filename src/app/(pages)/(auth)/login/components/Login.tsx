@@ -13,6 +13,8 @@ import { useRouter } from "next/navigation";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState({email:''})
+  const [passErrors, setPassErrors] = useState({ password: "" });
   const [errors, setErrors] = useState({ email: "", password: "" });
   const router = useRouter();
 
@@ -53,7 +55,7 @@ const Login = () => {
       console.log("Login data we are sending..", email, password);
 
       const response = await axiosInstance.post("/login", { email, password });
-      console.log("Login successful:", response);
+   
 
       if (response.data.token) {
         const user = response.data.user;
@@ -72,8 +74,13 @@ const Login = () => {
           default:
             router.push("/admin");
         }
-      } else {
-        setErrors({ ...errors, password: "Invalid email or password" });
+      } else if(response.data.result.error==='Email is not found') {
+        console.log('email is incroect');
+        
+        setEmailError({ email: "Email is not found" })
+        // setErrors({ ...errors, password: "Invalid email or password" });
+      }else{
+        setPassErrors({password:'Invalid Password'})
       }
     } catch (error) {
       console.error("Error during login:", error);
@@ -128,23 +135,26 @@ const Login = () => {
               name="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className={`absolute text-black bottom-[-25px] px-3 py-[8px] rounded-3xl w-full left-0 border ${errors.email ? 'border-red-500' : 'border-black'}`}
+              className={`absolute text-black bottom-[-25px] px-3 py-[8px] rounded-3xl w-full left-0 border ${emailError.email ? 'border-red-500' : 'border-black'}`}
               placeholder="Enter your email"
             />
-            {errors.email && <p className="text-red-500 text-xs absolute bottom-[-45px] left-2">{errors.email}</p>}
+            {emailError.email && <p className="text-red-500 text-xs absolute bottom-[-45px] left-2">{emailError.email}</p>}
             <input
               type="password"
               id="password"
               name="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className={`absolute text-black bottom-[-88px] px-3 py-[8px] rounded-3xl w-full left-0 border ${errors.password ? 'border-red-500' : 'border-black'}`}
+              className={`absolute text-black bottom-[-88px] px-3 py-[8px] rounded-3xl w-full left-0 border ${passErrors.password ? 'border-red-500' : 'border-black'}`}
               placeholder="Enter your password"
             />
-            {errors.password && <p className="text-red-500 text-xs absolute bottom-[-108px] left-2">{errors.password}</p>}
+            {passErrors.password && <p className="text-red-500 text-xs absolute bottom-[-108px] left-2">{passErrors.password}</p>}
+            <p className="absolute text-center text-blue-700 top-[169px] right-4 whitespace-nowrap">
+              <a href="/forgotPassword">Forgot Password</a>
+            </p>
             <button
               type="submit"
-              className="bg-black absolute flex top-3 justify-center left-2 mt-[180px] py-2 px-[160px] rounded-3xl"
+              className="bg-black absolute flex top-5 justify-center left-2 mt-[180px] py-2 px-[160px] rounded-3xl"
             >
               Login
             </button>

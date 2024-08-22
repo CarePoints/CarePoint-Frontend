@@ -1,10 +1,10 @@
-import Header from "../components/header/header"
+import CustomHeader from "../components/header/CustomHeader"
 import Dashboard from "./components/Dashboard"
 
 const page = () => {
   return (
     <div>
-        <Header/>
+      <CustomHeader currentPage="dashboard" />
       <Dashboard/>
     </div>
   )

@@ -1,21 +1,22 @@
-
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import OtpImg from "../../../../../../public/images/mobile-otp.gif";
 import axiosInstance from "@/app/hooks/useApi";
 import { useRouter } from "next/navigation";
+
 const Otp = () => {
   const [otp, setOtp] = useState(["", "", "", ""]);
-  const [timeLeft, setTimeLeft] = useState(60);
+  const [timeLeft, setTimeLeft] = useState(3);
   const [canResend, setCanResend] = useState(false);
+  const [error, setError] = useState("");
 
   const params = new URLSearchParams(window.location.search);
   const emailParam = params.get('email');
   const roleParam = params.get('role');
 
-
   const router = useRouter();
+
   useEffect(() => {
     if (timeLeft <= 0) {
       setCanResend(true);
@@ -50,37 +51,46 @@ const Otp = () => {
     e.preventDefault();
     const otpCode = otp.join(""); // Combine OTP inputs into a single string
 
+    // Validation
+    if (otpCode.length !== 4) {
+      setError("Please enter a valid 4-digit OTP");
+      return;
+    }
+
+    setError(""); // Clear any previous errors
+
     try {
       const response = await axiosInstance.post("/verify-otp", {
-        otp: otpCode,email:emailParam
+        otp: otpCode, email: emailParam
       });
       console.log("OTP verified successfully:", response.data);
       const isVerified = response.data.user.isVerified;
       if (isVerified) {
-        console.log("we can navige to dashboard", isVerified);
+        console.log("we can navigate to dashboard", isVerified);
         const email = emailParam ?? '';
-        if(roleParam==='doctor'){
-              router.push(`/doctorVerification?email=${encodeURIComponent(email)}`);
-        }else{
+        if(roleParam === 'doctor'){
+          router.push(`/doctorVerification?email=${encodeURIComponent(email)}`);
+        } else {
           router.push("/login");
         }
-        
       }
     } catch (error) {
       console.error("Error verifying OTP:", error);
+      setError("Invalid OTP. Please try again.");
     }
   };
 
   const handleResend = async () => {
     try {
-      const response = await axiosInstance.post("/signup", { email: emailParam , role: roleParam});
+      const response = await axiosInstance.post("/signup", { email: emailParam, role: roleParam });
       if (response.data.success) {
         setTimeLeft(60); // Reset timer
         setCanResend(false);
+        setError(""); // Clear any previous errors
       }
     } catch (error) {
       console.error("Error resending OTP:", error);
-      // Handle resend OTP failure (e.g., display an error message)
+      setError("Failed to resend OTP. Please try again later.");
     }
   };
 
@@ -102,6 +112,7 @@ const Otp = () => {
         </h1>
         <p className="text-gray-600 mb-4">Please enter the code sent to</p>
         <p className="text-gray-800 font-bold mb-6">{emailParam}</p>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
         <form onSubmit={handleSubmit} className="w-full">
           <div className="flex justify-between mb-4">
             {otp.map((digit, index) => (

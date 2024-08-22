@@ -331,7 +331,6 @@ const DoctorSignupForm: React.FC = () => {
     if(response){
       router.push('/login')
     }
-    
     message.success("Form submitted successfully!");
   };
 

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Sidebar,
   SidebarBody,
@@ -16,8 +16,60 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/app/utils/util";
 import PieChart  from "../components/PieChart";
+import { useRouter } from "next/navigation";
 
 export function SidebarDemo() {
+
+  const router = useRouter();
+  const [user, setUser] = useState<any>(null);
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:5000/doctor-service/user",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const result = await response.json();
+          setUser(result.user);
+          console.log("User blocked status:", result.user.isBlocked);
+
+          // Check if the user is blocked and handle logout
+          if (result.user.isBlocked) {
+            alert("Your account has been blocked. You will be logged out.");
+            hanldeLogout();
+          }
+        } else {
+          console.log("Failed to fetch user data");
+          hanldeLogout();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (token) {
+      fetchUser();
+    } else {
+      router.push("/login");
+    }
+  }, [router, token, user]);
+
+
+
+  const hanldeLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+    router.push("/login");
+  };
+
   const links = [
     {
       label: "Dashboard",

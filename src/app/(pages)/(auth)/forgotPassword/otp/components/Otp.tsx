@@ -93,7 +93,7 @@ const Otp = () => {
           className="mb-4"
         />
         <h1 className="text-3xl font-bold text-gray-800 mb-2">
-          Verification Code
+          Verification Code 
         </h1>
         <p className="text-gray-600 mb-4">Please enter the code sent to</p>
         <p className="text-gray-800 font-bold mb-6">{emailParam}</p>
