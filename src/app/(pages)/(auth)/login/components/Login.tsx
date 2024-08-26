@@ -1,7 +1,6 @@
-
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import loginIntroImag from "../../../../../../public/images/LoginPage.webp";
 import logo from "../../../../../../public/images/logo.png";
@@ -10,17 +9,56 @@ import SparklesText from "@/app/components/magicui/sparkles-text";
 import axiosInstance from "../../../../hooks/useApi";
 import { useRouter } from "next/navigation";
 
+interface User {
+  _id: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+  isBlocked: boolean;
+  isVerified: boolean;
+  roles: string;
+  profilePic: string | null;
+}
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState({email:''})
+  const [emailError, setEmailError] = useState({ email: "" });
   const [passErrors, setPassErrors] = useState({ password: "" });
   const [errors, setErrors] = useState({ email: "", password: "" });
   const router = useRouter();
 
+  useEffect(() => {
+    // Parse query parameters from URL
+    const query = new URLSearchParams(window.location.search);
+    const userData = query.get("user");
+    const tokenData = query.get("token");
+
+    if (userData && tokenData) {
+      // Decode and parse user data
+      console.log('asaaaaaaaaaaaaaa');
+      
+      const user: User = JSON.parse(decodeURIComponent(userData));
+      
+      // Store user and token in localStorage
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("token", decodeURIComponent(tokenData));
+      console.log('useresrwerew',localStorage.getItem('user'));
+      console.log('dfsadfasfsadf',localStorage.getItem('token'));
+      
+      // Redirect to the home page or any other page
+      router.push("/user/Home");
+    } else {
+      // Handle the case where there are no query parameters
+      console.log("No user data or token found in query parameters.");
+      // router.push("/login");
+    }
+  }, [router]);
+
   const validateForm = () => {
     let isValid = true;
     const newErrors = { email: "", password: "" };
+
 
     // Email validation
     if (!email) {
@@ -44,52 +82,113 @@ const Login = () => {
     return isValid;
   };
 
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
+  
     if (!validateForm()) {
       return;
     }
-
+  
     try {
-      console.log("Login data we are sending..", email, password);
-
+      console.log("Login data we are sending:", email, password);
+  
+      // Make the login request
       const response = await axiosInstance.post("/login", { email, password });
-   
-
+  
+      // Check if the response contains a token
       if (response.data.token) {
         const user = response.data.user;
         const userString = JSON.stringify(user);
-
+  
+        // Store user data and token in localStorage
         localStorage.setItem("user", userString);
         localStorage.setItem("token", response.data.token);
-
-        switch (user.roles) {
-          case "user":
-            router.push("/user/Home");
-            break;
-          case "doctor":
-            router.push("/doctor/dashboard");
-            break;
-          default:
-            router.push("/admin");
+  
+        // Retrieve user data from localStorage
+        let getUser = localStorage.getItem("user");
+        if (getUser) {
+          const parsedUser = JSON.parse(getUser);
+  
+          // Redirect based on user role
+          switch (parsedUser.roles) {
+            case "user":
+              router.push("/user/Home");
+              break;
+            case "doctor":
+              router.push("/doctor/dashboard");
+              break;
+            default:
+              router.push("/admin");
+          }
         }
-      } else if(response.data.result.error==='Email is not found') {
-        console.log('email is incroect');
-        
-        setEmailError({ email: "Email is not found" })
-        // setErrors({ ...errors, password: "Invalid email or password" });
-      }else{
-        setPassErrors({password:'Invalid Password'})
+      } else if (response.data.result?.error === 'Email is not found') {
+        // Handle case where email is not found
+        console.log('Email is incorrect');
+        setEmailError({ email: "Email is not found" });
+      } else if (response.data.result?.error === 'Invalid password') {
+        // Handle case where password is incorrect
+        setPassErrors({ password: 'Invalid Password' });
+      } else {
+        // Handle other unexpected cases
+        setErrors({ ...errors, password: "An error occurred. Please try again." });
       }
     } catch (error) {
       console.error("Error during login:", error);
       setErrors({ ...errors, password: "An error occurred. Please try again." });
     }
   };
+  
+
+  // const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+
+  //   if (!validateForm()) {
+  //     return;
+  //   }
+
+  //   try {
+  //     console.log("Login data we are sending..", email, password);
+
+  //     const response = await axiosInstance.post("/login", { email, password });
+
+  //     if (response.data.token) {
+  //       const user = response.data.user;
+  //       const userString = JSON.stringify(user);
+
+  //       localStorage.setItem("user", userString);
+  //       localStorage.setItem("token", response.data.token);
+  //       let getUser = localStorage.getItem("user");
+
+  //       switch (user.roles) {
+  //         case "user":
+  //           router.push("/user/Home");
+  //           break;
+  //         case "doctor":
+  //           router.push("/doctor/dashboard");
+  //           break;
+  //         default:
+  //           router.push("/admin");
+  //       }
+  //     } else if (response.data.result.error === "Email is not found") {
+  //       console.log("email is incroect");
+
+  //       setEmailError({ email: "Email is not found" });
+  //       // setErrors({ ...errors, password: "Invalid email or password" });
+  //     } else {
+  //       setPassErrors({ password: "Invalid Password" });
+  //     }
+  //   } catch (error) {
+  //     console.error("Error during login:", error);
+  //     setErrors({
+  //       ...errors,
+  //       password: "An error occurred. Please try again.",
+  //     });
+  //   }
+  // };
 
   const handleGoogleLogin = () => {
-    window.location.href = 'http://localhost:4000/user-service/google';
+    window.location.href = "http://localhost:4000/user-service/auth/google";
   };
 
   return (
@@ -120,7 +219,10 @@ const Login = () => {
               <i className="fab fa-facebook-f text-blue-600 mr-2"></i>
               Continue with Facebook
             </button>
-            <button onClick={handleGoogleLogin} className="absolute bottom-2 flex items-center justify-center px-3 py-[8px] rounded-3xl w-full left-0 border border-black bg-white text-black font-medium hover:bg-gray-100">
+            <button
+              onClick={handleGoogleLogin}
+              className="absolute bottom-2 flex items-center justify-center px-3 py-[8px] rounded-3xl w-full left-0 border border-black bg-white text-black font-medium hover:bg-gray-100"
+            >
               <i className="fab fa-google text-red-600 mr-2"></i>
               Continue with Google
             </button>
@@ -135,20 +237,32 @@ const Login = () => {
               name="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className={`absolute text-black bottom-[-25px] px-3 py-[8px] rounded-3xl w-full left-0 border ${emailError.email ? 'border-red-500' : 'border-black'}`}
+              className={`absolute text-black bottom-[-25px] px-3 py-[8px] rounded-3xl w-full left-0 border ${
+                emailError.email ? "border-red-500" : "border-black"
+              }`}
               placeholder="Enter your email"
             />
-            {emailError.email && <p className="text-red-500 text-xs absolute bottom-[-45px] left-2">{emailError.email}</p>}
+            {emailError.email && (
+              <p className="text-red-500 text-xs absolute bottom-[-45px] left-2">
+                {emailError.email}
+              </p>
+            )}
             <input
               type="password"
               id="password"
               name="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className={`absolute text-black bottom-[-88px] px-3 py-[8px] rounded-3xl w-full left-0 border ${passErrors.password ? 'border-red-500' : 'border-black'}`}
+              className={`absolute text-black bottom-[-88px] px-3 py-[8px] rounded-3xl w-full left-0 border ${
+                passErrors.password ? "border-red-500" : "border-black"
+              }`}
               placeholder="Enter your password"
             />
-            {passErrors.password && <p className="text-red-500 text-xs absolute bottom-[-108px] left-2">{passErrors.password}</p>}
+            {passErrors.password && (
+              <p className="text-red-500 text-xs absolute bottom-[-108px] left-2">
+                {passErrors.password}
+              </p>
+            )}
             <p className="absolute text-center text-blue-700 top-[169px] right-4 whitespace-nowrap">
               <a href="/forgotPassword">Forgot Password</a>
             </p>

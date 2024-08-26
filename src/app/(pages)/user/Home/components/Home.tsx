@@ -40,10 +40,7 @@ const Home = () => {
             alert("Your account has been blocked. You will be logged out.");
             hanldeLogout();
           }
-        } else {
-          console.log("Failed to fetch user data");
-          hanldeLogout();
-        }
+        } 
       } catch (error) {
         console.log(error);
       }

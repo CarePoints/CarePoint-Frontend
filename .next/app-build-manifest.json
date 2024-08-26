@@ -1,9 +1,15 @@
 {
   "pages": {
-    "/(pages)/(auth)/login/page": [
+    "/(pages)/user/Appointments/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(pages)/(auth)/login/page.js"
+      "static/chunks/app/(pages)/user/Appointments/page.js"
+    ],
+    "/(pages)/user/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(pages)/user/layout.css",
+      "static/chunks/app/(pages)/user/layout.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
@@ -17,38 +23,10 @@
       "static/css/app/(pages)/user/Home/page.css",
       "static/chunks/app/(pages)/user/Home/page.js"
     ],
-    "/(pages)/user/layout": [
+    "/(pages)/(auth)/login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/(pages)/user/layout.css",
-      "static/chunks/app/(pages)/user/layout.js"
-    ],
-    "/(pages)/admin/userManagement/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/(pages)/admin/userManagement/page.css",
-      "static/chunks/app/(pages)/admin/userManagement/page.js"
-    ],
-    "/(pages)/doctor/dashboard/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(pages)/doctor/dashboard/page.js"
-    ],
-    "/(pages)/admin/doctorManagement/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/(pages)/admin/doctorManagement/page.css",
-      "static/chunks/app/(pages)/admin/doctorManagement/page.js"
-    ],
-    "/(pages)/doctor/profile/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(pages)/doctor/profile/page.js"
-    ],
-    "/(pages)/user/Appointments/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(pages)/user/Appointments/page.js"
+      "static/chunks/app/(pages)/(auth)/login/page.js"
     ]
   }
 }

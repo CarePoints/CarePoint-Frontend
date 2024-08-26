@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import doctor from "../../../../../../public/images/profile.png";
 import axiosInstance from "@/app/hooks/useApi";
 import { SuccessModal } from "./modal";
+import demoDoctor2 from '../../../../../../public/images/demoDoctor.png'
 
 interface FormData {
   firstname?: string;
@@ -22,6 +23,7 @@ interface FormData {
   workingHours?: string;
   onCallAvailability?: string;
   consultationTypes?: string[];
+  profilePic?: any
 }
 
 const Profile = () => {
@@ -32,6 +34,8 @@ const Profile = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -97,7 +101,7 @@ const Profile = () => {
 
   const handleConfirm = async () => {
     try {
-      const response = await axiosInstance.post("/doctor-service/updateDocData", formData);
+      const response = await axiosInstance.post("/doctor-service/updateDocData", {formData,selectedFile});
       if (response) {
         console.log("Update response:", response);
         // alert("Changes saved successfully!");
@@ -116,6 +120,21 @@ const Profile = () => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
+  };
+
+
+  const handleFileChange = (event: any) => {
+    const file = event.target.files?.[0] || null;
+    setSelectedFile(file.name);
+    
+    if (file) {
+      console.log('file is', selectedFile)
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
 
@@ -309,7 +328,7 @@ const Profile = () => {
         transition={{ duration: 0.5 }}
       >
         <div className="relative bg-gradient-to-tr from-[#0E0A3C] to-[#0E0A3C] p-8 rounded-3xl flex flex-col md:flex-row items-center text-white shadow-lg mb-12 ">
-          <div className="flex-shrink-0 mb-6 md:mb-0">
+          {/* <div className="flex-shrink-0 mb-6 md:mb-0">
             <Image
               alt="doctor"
               src={doctor}
@@ -317,7 +336,38 @@ const Profile = () => {
               height={180}
               className="rounded-full border-4 border-white shadow-lg"
             />
-          </div>
+          </div> */}
+             <div className="flex flex-col items-center">
+    
+      <div className="relative flex-shrink-0 mb-6 md:mb-0">
+        {preview ? (
+          <Image
+            alt="doctor"
+            src={preview}
+            width={180}
+            height={180}
+            className="rounded-full border-4 border-white shadow-lg"
+          />
+        ) : (
+          <Image
+            alt="default doctor"
+            // src={`/images/${formData?.profilePic}` || doctor}
+            src={formData?.profilePic ? `/images/${formData.profilePic}` : demoDoctor2}
+            width={180}
+            height={180}
+            className="rounded-full border-4 border-white shadow-lg"
+          />
+        )}
+
+        {/* Hidden File Input */}
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+        />
+      </div>
+    </div>
           <div className="md:ml-6 flex-1 text-center md:text-left ">
             <h1 className="text-2xl md:text-4xl font-bold text-indigo-600 mb-2">
               {`${formData?.firstname} ${formData?.lastname}`}

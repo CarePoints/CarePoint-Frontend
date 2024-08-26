@@ -21,6 +21,9 @@ const CustomHeader = ({ currentPage }: any) => {
       case 'doctors':
         router.push('/admin/doctorManagement');
         break;
+      case 'userAppoinment':
+        router.push('/admin/userAppoinments')
+        break;
     }
   };
 
@@ -54,7 +57,7 @@ const CustomHeader = ({ currentPage }: any) => {
       </div>
       
       {/* Navigation Menu */}
-      <div className={`absolute bg-white px-[100px] py-[14px] top-20 rounded-full flex flex-row gap-4 md:gap-16 animate__animated animate__jackInTheBox ${isMenuOpen ? 'block w-full md:w-auto px-4 md:px-[80px] py-4 md:py-[15px] bg-white' : 'hidden'} md:flex items-center justify-center`}>
+      <div className={`absolute bg-white px-[30px] py-[14px] top-20 rounded-full flex flex-row gap-4 md:gap-16 animate__animated animate__jackInTheBox ${isMenuOpen ? 'block w-full md:w-auto px-4 md:px-[80px] py-4 md:py-[15px] bg-white' : 'hidden'} md:flex items-center justify-center`}>
         <div 
           className={`px-8 py-2 rounded-full ${currentPage === 'dashboard' ? 'bg-blue-500' : 'bg-violet-600'}`}
           onClick={() => handleNavigation('dashboard')}
@@ -72,6 +75,18 @@ const CustomHeader = ({ currentPage }: any) => {
           onClick={() => handleNavigation('doctors')}
         >
           <h1 className="text-[13px] text-white">Doctors</h1>
+        </div>
+        <div 
+          className={`px-8 py-2 rounded-full ${currentPage === 'userAppoinment' ? 'bg-blue-500' : 'bg-violet-600'}`}
+          onClick={() => handleNavigation('userAppoinment')}
+        >
+          <h1 className="text-[13px] text-white">UserAppointments</h1>
+        </div>
+        <div 
+          className={`px-8 py-2 rounded-full ${currentPage === 'meetings' ? 'bg-blue-500' : 'bg-violet-600'}`}
+          onClick={() => handleNavigation('meetings')}
+        >
+          <h1 className="text-[13px] text-white">DoctorAppointments</h1>
         </div>
       </div>
     </div>

@@ -70,30 +70,47 @@ export function SidebarDemo() {
     router.push("/login");
   };
 
-  const links = [
+  const links:any = [
     {
-      label: "Dashboard",
+      label:(
+        <span className="text-white dark:text-neutral-200">Dashboard</span>
+      ),
       href: "/doctor/dashboard",
       icon: (
         <IconBrandTabler className="text-white dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
     {
-      label: "Profile",
+      label:(
+        <span className="text-white dark:text-neutral-200">Profile</span>
+      ),
       href: "/doctor/profile",
       icon: (
         <IconUserBolt className="text-white dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
     {
-      label: "Settings",
+      label:(
+        <span className="text-white dark:text-neutral-200">Appoinments</span>
+      ),
+      href: "/doctor/appoinments",
+      icon: (
+        <IconUserBolt className="text-white dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+      ),
+    },
+    {
+      label:(
+        <span className="text-white dark:text-neutral-200">Setting</span>
+      ),
       href: "/doctor/settings",
       icon: (
         <IconSettings className="text-white dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
     {
-      label: "Logout",
+      label:(
+        <span className="text-white dark:text-neutral-200">Logout</span>
+      ),
       href: "/login",
       icon: (
         <IconArrowLeft className="text-white dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
@@ -112,7 +129,7 @@ export function SidebarDemo() {
           <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
             {open ? <Logo /> : <LogoIcon />}
             <div className="mt-8 flex flex-col gap-2 ">
-              {links.map((link, idx) => (
+              {links.map((link:any, idx:number) => (
                 <SidebarLink key={idx} link={link} />
               ))}
             </div>

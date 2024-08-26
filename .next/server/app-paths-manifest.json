@@ -1,8 +1,5 @@
 {
   "/(pages)/(auth)/login/page": "app/(pages)/(auth)/login/page.js",
-  "/(pages)/admin/userManagement/page": "app/(pages)/admin/userManagement/page.js",
-  "/(pages)/doctor/profile/page": "app/(pages)/doctor/profile/page.js",
-  "/(pages)/admin/doctorManagement/page": "app/(pages)/admin/doctorManagement/page.js",
-  "/(pages)/user/Home/page": "app/(pages)/user/Home/page.js",
-  "/(pages)/user/Appointments/page": "app/(pages)/user/Appointments/page.js"
+  "/(pages)/user/Appointments/page": "app/(pages)/user/Appointments/page.js",
+  "/(pages)/user/Home/page": "app/(pages)/user/Home/page.js"
 }

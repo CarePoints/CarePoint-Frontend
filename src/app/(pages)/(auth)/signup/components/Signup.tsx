@@ -224,7 +224,9 @@ const Signup = () => {
     setRole(value);
     setErrors((prev) => ({ ...prev, role: "" }));
   };
-
+  const handleGoogleLogin = () => {
+    window.location.href = 'http://localhost:4000/user-service/auth/google';
+  };
   const validateForm = () => {
     let isValid = true;
     const newErrors = {
@@ -346,6 +348,7 @@ const Signup = () => {
             <button
               type="button"
               className="absolute bottom-10 flex items-center justify-center px-3 py-[8px] rounded-3xl w-full left-0 border border-black bg-white text-black font-medium hover:bg-gray-100"
+              onClick={handleGoogleLogin}
             >
               <i className="fab fa-google text-red-600 mr-2"></i>
               Continue with Google
