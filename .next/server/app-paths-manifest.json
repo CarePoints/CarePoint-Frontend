@@ -1,5 +1,7 @@
 {
-  "/(pages)/(auth)/login/page": "app/(pages)/(auth)/login/page.js",
+  "/(pages)/doctor/appoinments/page": "app/(pages)/doctor/appoinments/page.js",
+  "/(pages)/doctor/camara/page": "app/(pages)/doctor/camara/page.js",
   "/(pages)/user/Appointments/page": "app/(pages)/user/Appointments/page.js",
-  "/(pages)/user/Home/page": "app/(pages)/user/Home/page.js"
+  "/(pages)/user/Home/page": "app/(pages)/user/Home/page.js",
+  "/(pages)/user/Appointments/camara/page": "app/(pages)/user/Appointments/camara/page.js"
 }

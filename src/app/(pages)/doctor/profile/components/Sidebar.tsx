@@ -36,7 +36,7 @@ export function SidebarDemo() {
       ),
       href: "/doctor/profile",
       icon: (
-        <IconUserBolt className="text-white dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <IconUserBolt className="text-white dark:text-neutral-200 h-5 w-5 fl  ex-shrink-0" />
       ),
     },
     {
@@ -45,9 +45,7 @@ export function SidebarDemo() {
       ),
       href: "/doctor/appoinments",
       icon: (
-        <Image src={appoinment} alt='appoinment' className="text-white filter-white  dark:text-neutral-200 h-5 w-5 flex-shrink-0"/>
-        // <IconUserBolt className="text-white dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-        
+        <IconUserBolt className="text-white dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
     {
@@ -61,7 +59,7 @@ export function SidebarDemo() {
     },
     {
       label:(
-        <span className="text-white dark:text-neutral-200">Logout</span>
+        <span className="text-white dark:text-neutral-200" onClick={()=>logout()}>Logout</span>
       ),
       href: "/login",
       icon: (
@@ -69,6 +67,12 @@ export function SidebarDemo() {
       ),
     },
   ];
+  let logout =()=>{
+    console.log('its working mahn')
+    sessionStorage.removeItem('doctor');
+    sessionStorage.removeItem('token');
+    localStorage.removeItem('doctor');
+  }
   const [open, setOpen] = useState(false);
   return (
     <div

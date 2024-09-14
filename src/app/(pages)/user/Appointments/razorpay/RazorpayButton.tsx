@@ -52,7 +52,6 @@ const RazorpayButton: React.FC<RazorpayButtonProps> = ({ amount , onSuccess}) =>
         image: logo, // Add your logo
         order_id: data.order.id, // Razorpay order ID from backend
         handler: function (response: any) {
-          alert(`Payment successful! Razorpay Payment ID: ${response.razorpay_payment_id}`);
           onSuccess()
         }
       };

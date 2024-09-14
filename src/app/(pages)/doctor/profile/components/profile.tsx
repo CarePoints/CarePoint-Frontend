@@ -39,7 +39,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const user = localStorage.getItem("user");
+        const user = localStorage.getItem("doctor");
         if (user) {
           const parsedUser = JSON.parse(user);
           const email = parsedUser.email;

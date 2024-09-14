@@ -21,8 +21,8 @@ const CustomHeader = ({ currentPage }: any) => {
       case 'doctors':
         router.push('/admin/doctorManagement');
         break;
-      case 'userAppoinment':
-        router.push('/admin/userAppoinments')
+      case 'productsListing':
+        router.push('/admin/productsListing');
         break;
     }
   };
@@ -77,17 +77,12 @@ const CustomHeader = ({ currentPage }: any) => {
           <h1 className="text-[13px] text-white">Doctors</h1>
         </div>
         <div 
-          className={`px-8 py-2 rounded-full ${currentPage === 'userAppoinment' ? 'bg-blue-500' : 'bg-violet-600'}`}
-          onClick={() => handleNavigation('userAppoinment')}
+          className={`px-8 py-2 rounded-full ${currentPage === 'productsListing' ? 'bg-blue-500' : 'bg-violet-600'}`}
+          onClick={() => handleNavigation('productsListing')}
         >
-          <h1 className="text-[13px] text-white">UserAppointments</h1>
+          <h1 className="text-[13px] text-white">Products</h1>
         </div>
-        <div 
-          className={`px-8 py-2 rounded-full ${currentPage === 'meetings' ? 'bg-blue-500' : 'bg-violet-600'}`}
-          onClick={() => handleNavigation('meetings')}
-        >
-          <h1 className="text-[13px] text-white">DoctorAppointments</h1>
-        </div>
+
       </div>
     </div>
   );

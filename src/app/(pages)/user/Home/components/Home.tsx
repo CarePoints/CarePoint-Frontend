@@ -11,12 +11,27 @@ import { testimonials } from "@/app/(pages)/data/testmonials";
 import { TextGenerateEffect } from "@/app/components/ui/text-generate-effect";
 import "animate.css";
 import { useRouter } from "next/navigation";
+import { Socket, io } from 'socket.io-client';
 
 const Home = () => {
   const words = `Your Health, Our Commitment`;
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const token = localStorage.getItem("token");
+
+  const [socket, setSocket] = useState<Socket | null>(null);
+  const [roomId, setRoomId] = useState<string | null>(null);
+
+useEffect(()=>{
+  const socketInstance = io('http://localhost:10000');
+  console.log('socketInstance' ,socketInstance)
+  setSocket(socketInstance);
+
+  socketInstance.on('connect', () => {
+    console.log('Socket connected:', socketInstance.id);
+  });
+},[])
+
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -51,6 +66,13 @@ const Home = () => {
       router.push("/login");
     }
   }, [router, token, user]);
+
+
+  // const generateRoomId = (userEmail: any, doctorId: string) => {
+  //   const combinedString = `${userEmail}-${doctorId}`;
+  //   return btoa(combinedString);
+  // };
+
 
   const hanldeLogout = () => {
     localStorage.removeItem("token");
@@ -303,7 +325,7 @@ const Home = () => {
             className="rounded-3xl w-full max-w-[680px] h-auto mx-auto lg:absolute lg:left-[780px] lg:top-[120px] lg:max-w-[50%] "
           />
           <div className="mt-6 lg:mt-0 text-center lg:text-left">
-          <a href="#">
+          <a href="/user/MedicalStore">
           <ShinyButton
               text="Shop Now"
               className="bg-white lg:absolute lg:right-20 lg:bottom-10"

@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 
 const Header = () => {
   const pathname = usePathname();
-  const excludedRoutes = ['/user/Home'];
+  const excludedRoutes = ['/user/Home','/user/Appointments/camara'];
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -20,6 +20,8 @@ const Header = () => {
   if (excludedRoutes.includes(pathname)) {
     return null;
   }
+
+
 
   return (
     <header className="bg-[#EAEAEA] py-4 px-6 mt-4 rounded-full shadow-md">

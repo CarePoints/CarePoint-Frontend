@@ -1,15 +1,9 @@
 {
   "pages": {
-    "/(pages)/user/Appointments/page": [
+    "/(pages)/(auth)/login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(pages)/user/Appointments/page.js"
-    ],
-    "/(pages)/user/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/(pages)/user/layout.css",
-      "static/chunks/app/(pages)/user/layout.js"
+      "static/chunks/app/(pages)/(auth)/login/page.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
@@ -23,10 +17,42 @@
       "static/css/app/(pages)/user/Home/page.css",
       "static/chunks/app/(pages)/user/Home/page.js"
     ],
-    "/(pages)/(auth)/login/page": [
+    "/(pages)/user/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(pages)/(auth)/login/page.js"
+      "static/css/app/(pages)/user/layout.css",
+      "static/chunks/app/(pages)/user/layout.js"
+    ],
+    "/(pages)/doctor/dashboard/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(pages)/doctor/dashboard/page.js"
+    ],
+    "/(pages)/user/Appointments/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(pages)/user/Appointments/page.js"
+    ],
+    "/(pages)/doctor/appoinments/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(pages)/doctor/appoinments/page.js"
+    ],
+    "/(pages)/doctor/camara/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(pages)/doctor/camara/page.js"
+    ],
+    "/(pages)/user/Appointments/camara/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(pages)/user/Appointments/camara/page.js"
+    ],
+    "/(pages)/user/Appointments/camara/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(pages)/user/Appointments/camara/layout.css",
+      "static/chunks/app/(pages)/user/Appointments/camara/layout.js"
     ]
   }
 }

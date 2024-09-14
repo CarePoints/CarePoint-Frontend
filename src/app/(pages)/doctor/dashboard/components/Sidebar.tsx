@@ -17,12 +17,16 @@ import Image from "next/image";
 import { cn } from "@/app/utils/util";
 import PieChart  from "../components/PieChart";
 import { useRouter } from "next/navigation";
+import { setDoctorData } from "@/redux/yourSlice";
+import { useDispatch } from "react-redux";
 
 export function SidebarDemo() {
 
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const token = localStorage.getItem("token");
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -38,7 +42,9 @@ export function SidebarDemo() {
 
         if (response.ok) {
           const result = await response.json();
+          console.log('doctor is ',result.user);
           setUser(result.user);
+          dispatch(setDoctorData(result.user))
           console.log("User blocked status:", result.user.isBlocked);
 
           // Check if the user is blocked and handle logout
@@ -65,7 +71,7 @@ export function SidebarDemo() {
 
   const hanldeLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    localStorage.removeItem("doctor");
     setUser(null);
     router.push("/login");
   };
@@ -109,7 +115,7 @@ export function SidebarDemo() {
     },
     {
       label:(
-        <span className="text-white dark:text-neutral-200">Logout</span>
+        <span className="text-white dark:text-neutral-200" onClick={()=>logout()}>Logout</span>
       ),
       href: "/login",
       icon: (
@@ -117,6 +123,12 @@ export function SidebarDemo() {
       ),
     },
   ];
+  let logout =()=>{
+    console.log('its working mahn')
+    sessionStorage.removeItem('doctor');
+    sessionStorage.removeItem('token');
+    localStorage.removeItem('doctor');
+  }
   const [open, setOpen] = useState(false);
   return (
     <div

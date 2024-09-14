@@ -4,10 +4,12 @@ import {usePathname} from 'next/navigation'
 
 const footer = () => {
  const pathname = usePathname();
-//  const excludedRoutes = ['/signup','/otp','/otp/success'];
-//  if(excludedRoutes.includes(pathname)){
-//   return null
-//  }
+ const excludedRoutes = ['/user/Appointments/camara'];
+ if(excludedRoutes.includes(pathname)){
+  return null
+ }
+
+
 
   return (
     <div>
