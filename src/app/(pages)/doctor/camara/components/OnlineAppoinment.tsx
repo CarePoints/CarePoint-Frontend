@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import io, { Socket } from "socket.io-client";
 import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 
 interface Doctor {
   _id: string;
@@ -68,10 +69,13 @@ const DoctorVideoCall = () => {
   const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
   const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
+  const router = useRouter()
 
   const appoinmentData = useSelector(
     (state: any) => state.search.appoinmentData
   );
+
+
 
   useEffect(() => {
     const doctorData = localStorage.getItem("doctor");
@@ -83,7 +87,6 @@ const DoctorVideoCall = () => {
     if (socket) {
       socket.on("call-created", (call) => {
         console.log("Call created:", call);
-        alert("call crated succesuuhfully mahn");
       });
     }
     return () => {
@@ -94,6 +97,25 @@ const DoctorVideoCall = () => {
   useEffect(() => {
     const socketInstance = io("http://localhost:10000");
     setSocket(socketInstance);
+
+    if (socketInstance) {
+      const doctorData = localStorage.getItem("doctor");
+      if (doctorData) {
+        const parseDoctor = JSON.parse(doctorData);
+      
+     
+      let doctorEmail = parseDoctor.email
+      let userEmail = appoinmentData.user.email;
+
+      const roomId = generateRoomId(doctorEmail, userEmail);
+      socketInstance.emit('notify-user', {
+        roomId: roomId,
+        message: 'The doctor wants to notify you.'
+      });
+      console.log('nofication is sending..')
+    }
+  }
+
 
     const initializeMediaDevices = async () => {
       try {
@@ -131,25 +153,24 @@ const DoctorVideoCall = () => {
           }
         };
 
-        socketInstance.on('ice-candidate', (data) => {
-          console.log('ICE candidate received:', data);
-          
+        socketInstance.on("ice-candidate", (data) => {
+          console.log("ICE candidate received:", data);
+
           const peerConnection = peerConnectionRef.current;
-        
+
           if (peerConnection && data.candidate) {
-            
             const candidate = new RTCIceCandidate(data.candidate);
-            
-            peerConnection.addIceCandidate(candidate)
+
+            peerConnection
+              .addIceCandidate(candidate)
               .then(() => {
-                console.log('Successfully added ICE candidate');
+                console.log("Successfully added ICE candidate");
               })
               .catch((error) => {
-                console.error('Error adding ICE candidate', error);
+                console.error("Error adding ICE candidate", error);
               });
           }
         });
-        
 
         peerConnection.ontrack = (event) => {
           if (remoteVideoRef.current) {
@@ -163,21 +184,21 @@ const DoctorVideoCall = () => {
 
     initializeMediaDevices();
 
-    socketInstance.on('answer', (data) => {
-      console.log('Received answer from:', data);
-  
+    socketInstance.on("answer", (data) => {
+      console.log("Received answer from:", data);
+
       const peerConnection = peerConnectionRef.current;
       if (peerConnection) {
-        peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer))
+        peerConnection
+          .setRemoteDescription(new RTCSessionDescription(data.answer))
           .then(() => {
-            console.log('Remote description set successfully');
+            console.log("Remote description set successfully");
           })
           .catch((error) => {
-            console.error('Error setting remote description:', error);
+            console.error("Error setting remote description:", error);
           });
       }
     });
-  
 
     return () => {
       socketInstance.disconnect();
@@ -226,6 +247,7 @@ const DoctorVideoCall = () => {
     if (socket) socket.emit("end-call", { callId: "doctor-call-id" });
     setIsCallActive(false);
     setCallDuration(0);
+    router.push('/doctor/appoinments')
   };
 
   const toggleMute = () => {
@@ -262,7 +284,7 @@ const DoctorVideoCall = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-[#0E0A3C]">
       {/* Sidebar */}
       <div className="w-64 bg-white shadow-md">
         <div className="p-4">
@@ -278,12 +300,12 @@ const DoctorVideoCall = () => {
             <Camera className="mr-3 h-5 w-5" />
             Video Call
           </a>
-          {/* <a
+          <a
             href="#"
             className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200"
           >
             <Users className="mr-3 h-5 w-5" />
-            Patient List
+            Add Prescription
           </a>
           <a
             href="#"
@@ -291,7 +313,7 @@ const DoctorVideoCall = () => {
           >
             <Settings className="mr-3 h-5 w-5" />
             Settings
-          </a> */}
+          </a> 
         </nav>
       </div>
 
@@ -300,7 +322,7 @@ const DoctorVideoCall = () => {
         {/* Header */}
         <header className="bg-white shadow-sm">
           <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-            <h1 className="text-2xl font-semibold text-gray-900">
+            <h1 className="text-2xl font-semibold text-white">
               Video Consultation
             </h1>
             <div className="flex items-center space-x-4">
@@ -394,7 +416,6 @@ const DoctorVideoCall = () => {
                   className="p-3 rounded-full bg-green-500 hover:bg-green-600"
                 >
                   <Camera className="text-white" />
-                  start
                 </button>
               )}
             </div>

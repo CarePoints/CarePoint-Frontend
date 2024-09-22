@@ -208,6 +208,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Socket, io } from 'socket.io-client';
 import { Mic, MicOff, Video, VideoOff, PhoneOff, Phone, MessageSquare, User } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+
 
 const UserVideoCall = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -215,8 +217,9 @@ const UserVideoCall = () => {
   const [isMuted, setIsMuted] = useState(false);
   const [isVideoOff, setIsVideoOff] = useState(false);
   const [isCallActive, setIsCallActive] = useState(false);
-  const [chatMessages, setChatMessages] = useState<{ sender: string; message: string }[]>([]);
-  const [newMessage, setNewMessage] = useState('');
+
+  const router = useRouter()
+
   const localVideoRef = useRef<HTMLVideoElement | null>(null);
   const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
   const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
@@ -257,10 +260,6 @@ const UserVideoCall = () => {
       }
     });
 
-    socketInstance.on('chat-message', (message) => {
-      setChatMessages(prev => [...prev, message]);
-    });
-
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
       .then(stream => {
         localStreamRef.current = stream;
@@ -298,18 +297,24 @@ const UserVideoCall = () => {
   }, [roomId]);
 
   useEffect(() => {
+    console.log('sssssssss')
     const doctorData = localStorage.getItem('doctorOnlineAppoinemnets')
     const userData = localStorage.getItem('user')
+    console.log('userData',userData)
+    console.log('doctorData',doctorData)
     if(doctorData && userData){
       const parseDocData = JSON.parse(doctorData)
       const parseUserData = JSON.parse(userData)
       const doctorEmail = parseDocData.email;
       const userEmail = parseUserData.email;
+      console.log('doctor',doctorEmail)
+      console.log('doctor',userEmail)
       setRoomId(btoa(`${doctorEmail}-${userEmail}`));
     }
   }, []);
 
   const startCall = async () => {
+    console.log('jeeee',peerConnectionRef.current)
     if (!peerConnectionRef.current || !socket || !roomId) return;
     socket.emit('join-room', { roomId });
     setIsCallActive(true);
@@ -323,6 +328,7 @@ const UserVideoCall = () => {
       localStreamRef.current.getTracks().forEach(track => track.stop());
     }
     setIsCallActive(false);
+    router.push('/user/Home')
   };
 
   const toggleMute = () => {
@@ -343,14 +349,6 @@ const UserVideoCall = () => {
     }
   };
 
-  const sendMessage = () => {
-    if (newMessage.trim() && socket) {
-      const message = { sender: 'You', message: newMessage.trim() };
-      socket.emit('chat-message', { roomId, message });
-      setChatMessages(prev => [...prev, message]);
-      setNewMessage('');
-    }
-  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-8">

@@ -50,7 +50,6 @@ const Medicines = () => {
         userId,
         medicineId
       });
-      console.log('Added to cart:', response.data);
       if(response){
         router.push('/user/MedicalStore/Cart')
       }

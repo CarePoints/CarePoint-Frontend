@@ -2,6 +2,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 type SearchType = 'doctor' | 'location';
 
+interface Doctor {
+  firstname: string;
+  lastname: string;
+}
+
 interface SearchState {
   doctorSearchValue: string;
   locationSearchValue: string;
@@ -9,6 +14,7 @@ interface SearchState {
   filters: string[];
   doctorData: any[]
   appoinmentData: Record<string, any> | null; 
+  messageDoctor: any | null;
 }
 
 const initialState: SearchState = {
@@ -18,6 +24,8 @@ const initialState: SearchState = {
   filters: [],
   doctorData:[],
   appoinmentData: null,
+  messageDoctor: null,
+  
 }
 
 const yourSlice = createSlice({
@@ -42,10 +50,13 @@ const yourSlice = createSlice({
     },
     setAppoinmentData(state, action: PayloadAction<string[]>){
       state.appoinmentData = action.payload;
+    },
+    setDoctorForMessage(state, action: PayloadAction<Doctor | null>) {
+      state.messageDoctor = action.payload;
     }
   },
 });
 
 
-export const {setDoctorSearchValue, setLocationSearchValue, setSelectedSearchType,setFilters ,setDoctorData,setAppoinmentData} = yourSlice.actions;
+export const {setDoctorSearchValue, setLocationSearchValue, setSelectedSearchType,setFilters ,setDoctorData,setAppoinmentData,setDoctorForMessage} = yourSlice.actions;
 export default yourSlice.reducer;

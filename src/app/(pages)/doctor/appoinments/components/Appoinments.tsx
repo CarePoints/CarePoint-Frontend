@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 import { FaEnvelope, FaPhone, FaCalendar, FaClock } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
-import io, { Socket } from "socket.io-client";
 
 interface User {
   firstname: string;
@@ -38,8 +37,6 @@ const Appointments: React.FC = () => {
   const [actionType, setActionType] = useState<"accept" | "reject" | null>(
     null
   );
-  const [socketInstance, setSocketInstance] = useState<Socket | null>(null);
-
 
   const dispatch = useDispatch();
   const navigation = useRouter();
@@ -82,18 +79,6 @@ const Appointments: React.FC = () => {
       fetchAppointments();
     }
   }, [doctorData]);
-
-
-  useEffect(()=>{
-    const socketInstanceConnection = io("http://localhost:10000")
-    setSocketInstance(socketInstanceConnection);
-  },[])
-
-
-
-
-
-
 
   const handleAcceptClick = (appointment: Appointment) => {
     setSelectedAppointment(appointment);
@@ -185,30 +170,9 @@ const Appointments: React.FC = () => {
 
   const handleStartVideoCall = (appointment: any) => {
     console.log("handleStartVideoCall is workign", appointment);
-    let userEmail = appointment.user.email;
-    let doctorId = appointment.doctorId
-    const roomId = generateRoomId(userEmail,doctorId)
-    console.log('roomId',roomId);
-    
-    if (socketInstance) {
-      // Emit an event to the server to notify the user
-      socketInstance.emit('notify-user', {
-        roomId: roomId,
-        message: 'The doctor wants to notify you.'
-      });
-      console.log('nofication is sending...')
-    }
-
     dispatch(setAppoinmentData(appointment));
     navigation.push("/doctor/camara");
   };
-
-
-  const generateRoomId = (userEmail: any, doctorId: string) => {
-    const combinedString = `${userEmail}-${doctorId}`;
-    return btoa(combinedString);
-  };
-
 
   const ConfirmationModal: React.FC<{
     isVisible: boolean;

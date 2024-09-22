@@ -1,9 +1,9 @@
 {
   "pages": {
-    "/(pages)/(auth)/login/page": [
+    "/(pages)/doctor/profile/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(pages)/(auth)/login/page.js"
+      "static/chunks/app/(pages)/doctor/profile/page.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
@@ -11,11 +11,10 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/(pages)/user/Home/page": [
+    "/(pages)/user/MedicalStore/Cart/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/(pages)/user/Home/page.css",
-      "static/chunks/app/(pages)/user/Home/page.js"
+      "static/chunks/app/(pages)/user/MedicalStore/Cart/page.js"
     ],
     "/(pages)/user/layout": [
       "static/chunks/webpack.js",
@@ -23,20 +22,46 @@
       "static/css/app/(pages)/user/layout.css",
       "static/chunks/app/(pages)/user/layout.js"
     ],
+    "/(pages)/(auth)/login/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(pages)/(auth)/login/page.js"
+    ],
+    "/(pages)/user/Home/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(pages)/user/Home/page.css",
+      "static/chunks/app/(pages)/user/Home/page.js"
+    ],
     "/(pages)/doctor/dashboard/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(pages)/doctor/dashboard/page.js"
+    ],
+    "/(pages)/user/MedicalStore/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(pages)/user/MedicalStore/page.js"
+    ],
+    "/(pages)/doctor/appoinments/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(pages)/doctor/appoinments/page.js"
+    ],
+    "/(pages)/doctor/chat/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(pages)/doctor/chat/page.js"
     ],
     "/(pages)/user/Appointments/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(pages)/user/Appointments/page.js"
     ],
-    "/(pages)/doctor/appoinments/page": [
+    "/(pages)/user/Appointments/chat/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(pages)/doctor/appoinments/page.js"
+      "static/chunks/app/(pages)/user/Appointments/chat/page.js"
     ],
     "/(pages)/doctor/camara/page": [
       "static/chunks/webpack.js",
@@ -53,6 +78,11 @@
       "static/chunks/main-app.js",
       "static/css/app/(pages)/user/Appointments/camara/layout.css",
       "static/chunks/app/(pages)/user/Appointments/camara/layout.js"
+    ],
+    "/_not-found/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/_not-found/page.js"
     ]
   }
 }

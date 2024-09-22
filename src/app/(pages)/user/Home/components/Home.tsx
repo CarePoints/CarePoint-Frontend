@@ -12,26 +12,71 @@ import { TextGenerateEffect } from "@/app/components/ui/text-generate-effect";
 import "animate.css";
 import { useRouter } from "next/navigation";
 import { Socket, io } from 'socket.io-client';
+import {NotificationModal} from "../NotificationModal/page";
+
 
 const Home = () => {
   const words = `Your Health, Our Commitment`;
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const token = localStorage.getItem("token");
+  const [roomId, setRoomId] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
   const [socket, setSocket] = useState<Socket | null>(null);
-  const [roomId, setRoomId] = useState<string | null>(null);
+  const [notifications, setNotifications] = useState<any[]>([]);
 
-useEffect(()=>{
-  const socketInstance = io('http://localhost:10000');
-  console.log('socketInstance' ,socketInstance)
-  setSocket(socketInstance);
 
-  socketInstance.on('connect', () => {
-    console.log('Socket connected:', socketInstance.id);
-  });
-},[])
 
+  useEffect(() => {
+    const socketInstance = io('http://localhost:10000');
+    setSocket(socketInstance);
+
+    let doctorData = localStorage.getItem('doctorOnlineAppoinemnets')
+    let userData = localStorage.getItem('user');
+
+    
+ if(doctorData && userData){
+  let parsedDoctor = JSON.parse(doctorData)
+  let parseduserData = JSON.parse(userData)
+  let roomId = generateRoomId(parsedDoctor.email,parseduserData.email)
+
+    socketInstance.emit('join-notification', { roomId });
+
+    console.log('Socket instance', socketInstance);
+  }
+    // Handle socket connection
+    socketInstance.on('connect', () => {
+      console.log('Socket connected:', socketInstance.id);
+    });
+  
+    socketInstance.on('notification', (data) => {
+      console.log('Notification received');
+      const { roomId, message } = data;
+      setRoomId(roomId);
+      console.log('Received notification:', { roomId, message });
+         setModalMessage(message);
+      setIsModalOpen(true);
+      // Optionally, update the notifications state
+      setNotifications((prevNotifications) => [
+        ...prevNotifications,
+        { roomId, message }
+      ]);
+    });
+  
+    return () => {
+      if (socketInstance) {
+        socketInstance.disconnect();
+        console.log('Socket disconnected');
+      }
+    };
+  }, []); 
+  
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -68,11 +113,10 @@ useEffect(()=>{
   }, [router, token, user]);
 
 
-  // const generateRoomId = (userEmail: any, doctorId: string) => {
-  //   const combinedString = `${userEmail}-${doctorId}`;
-  //   return btoa(combinedString);
-  // };
-
+  const generateRoomId = (doctorEmail: any, userEmail: string) => {
+    const combinedString = `${doctorEmail}-${userEmail}`;
+    return btoa(combinedString);
+  };
 
   const hanldeLogout = () => {
     localStorage.removeItem("token");
@@ -393,6 +437,10 @@ useEffect(()=>{
         </div>
       </div>
       <div id="contact"></div>
+      <NotificationModal  
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        message={modalMessage}/>
     </div>
   );
 };

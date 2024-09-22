@@ -13,6 +13,7 @@ import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
+import { setDoctorForMessage } from "@/redux/yourSlice";
 
 // Define a type for the doctor data
 type Doctor = {
@@ -27,7 +28,7 @@ type Doctor = {
 type Booking = {
   doctor: Doctor;
   status?: string;
-  userId: string; 
+  userId: string;
 };
 
 interface UserData {
@@ -48,8 +49,7 @@ const Appointments = () => {
   const [cancelDoctor, setCancelDoctor] = useState<string | null>(null);
   const [specializationFilter, setSpecializationFilter] = useState<string>("");
   const filters = useSelector((state: RootState) => state.search.filters);
-  const [userData, setUserData] = useState<UserData|null>(null)
-
+  const [userData, setUserData] = useState<UserData | null>(null);
 
   const dispatch: AppDispatch = useDispatch();
   const doctorSearchValue = useSelector(
@@ -61,7 +61,6 @@ const Appointments = () => {
   const selectedSearchType = useSelector(
     (state: RootState) => state.search.selectedSearchType
   );
-
 
   const router = useRouter();
   const { Text } = Typography;
@@ -136,7 +135,6 @@ const Appointments = () => {
   };
 
   const handleModalOk = async () => {
-
     let Date = date?.toDateString();
     let Time = time?.format("HH:mm:ss");
     let user = localStorage.getItem("user");
@@ -154,8 +152,7 @@ const Appointments = () => {
       setOpen(true);
     } else {
       const selectedDoctorString = JSON.stringify(selectedDoctor);
-      localStorage.setItem('doctorOnlineAppoinemnets',selectedDoctorString)
-      alert("online appoinment is successully");
+      localStorage.setItem("doctorOnlineAppoinemnets", selectedDoctorString);
     }
 
     setIsModalVisible(false);
@@ -173,7 +170,7 @@ const Appointments = () => {
     if (!cancelDoctor) {
       return null;
     }
-    localStorage.removeItem('doctorOnlineAppoinemnets')
+    localStorage.removeItem("doctorOnlineAppoinemnets");
     await axiosInstance.post("/user-service/cancelBooking", { cancelDoctor });
     await axiosInstance.post("/admin-service/cancelBooking", { cancelDoctor });
     await axiosInstance.post("/doctor-service/cancelBooking", { cancelDoctor });
@@ -220,15 +217,18 @@ const Appointments = () => {
     return matchesName && matchesSpecialization && matchesLocation;
   });
 
-
   useEffect(() => {
-    let user = sessionStorage.getItem('user');
+    let user = sessionStorage.getItem("user");
     if (user) {
-      setUserData(JSON.parse(user));  // Parse the JSON string to an object
+      setUserData(JSON.parse(user)); // Parse the JSON string to an object
     }
-  }, []);  // Runs once when the component mounts
+  }, []);
 
-
+  const messageDoctor = (doctor: any) => {
+    console.log("doctor is get");
+    dispatch(setDoctorForMessage(doctor));
+    router.push("/user/Appointments/chat");
+  };
 
   return (
     <div className="flex flex-col lg:flex-row p-4 lg:p-10 lg:px-20 mt-6">
@@ -327,39 +327,52 @@ const Appointments = () => {
                   </div>
                   <div className="border-b border-gray-200 my-3 lg:my-4"></div>
                   <div className="flex justify-between mt-auto">
-                    <Button className="bg-blue-500 text-white px-3 lg:px-5 py-2 lg:py-3 rounded-full text-xs font-medium hover:bg-blue-600 transition duration-300 ease-in-out shadow-md">
+                    {/* <a href="http://localhost:3000/user/Appointments/chat"> */}
+                    <Button
+                      className="bg-blue-500 text-white px-3 lg:px-5 py-2 lg:py-3 rounded-full text-xs font-medium hover:bg-blue-600 transition duration-300 ease-in-out shadow-md"
+                      onClick={() => messageDoctor(doctor)}
+                    >
                       Message
                     </Button>
+                    {/* </a> */}
 
-                    {/* <Button
+                    <Button
                       onClick={() => {
-                        const doctorBooking = isBooked.find(
-                          (booking) =>
-                            booking.doctor.firstname === doctor.firstname
-                        );
+                        if (userData) {
+                          const doctorBooking = isBooked.find(
+                            (booking: Booking) =>
+                              booking.doctor.firstname === doctor.firstname &&
+                              booking.userId === userData._id
+                          );
 
-                        if (doctorBooking) {
-                          setCancelDoctor(doctor.email);
-                          setIsBookedModalVisible(true);
-                        } else {
-                          handleDoctorSelection(doctor);
+                          if (doctorBooking) {
+                            setCancelDoctor(doctor.email);
+                            setIsBookedModalVisible(true);
+                          } else {
+                            handleDoctorSelection(doctor);
+                          }
                         }
+
+                        // handleDoctorSelection(doctor);
                       }}
                       className={`${(() => {
-                        const doctorBooking = isBooked.find(
-                          (booking) =>
-                            booking.doctor.firstname === doctor.firstname
-                        );
-                        if (doctorBooking) {
-                          switch (doctorBooking.status) {
-                            case "pending":
-                              return "bg-orange-500 hover:bg-orange-600";
-                            case "canceled":
-                              return "bg-black hover:bg-gray-800"; // Black for cancelled
-                            case "confirmed":
-                              return "bg-red-500 hover:bg-red-600";
-                            default:
-                              return "bg-gray-500 hover:bg-gray-600"; // Default case
+                        if (userData) {
+                          const doctorBooking = isBooked.find(
+                            (booking: Booking) =>
+                              booking.doctor.firstname === doctor.firstname &&
+                              booking.userId === userData._id
+                          );
+                          if (doctorBooking) {
+                            switch (doctorBooking.status) {
+                              case "pending":
+                                return "bg-orange-500 hover:bg-orange-600";
+                              case "canceled":
+                                return "bg-slate-700  hover:bg-tan-400";
+                              case "confirmed":
+                                return "bg-red-500 hover:bg-red-600";
+                              default:
+                                return "bg-gray-500 hover:bg-gray-600";
+                            }
                           }
                         }
                         return selectedDoctor === doctor
@@ -368,98 +381,30 @@ const Appointments = () => {
                       })()} text-white px-3 lg:px-4 py-2 lg:py-3 rounded-full text-xs font-medium transition duration-300 ease-in-out shadow-md`}
                     >
                       {(() => {
-                        const doctorBooking = isBooked.find(
-                          (booking) =>
-                            booking.doctor.firstname === doctor.firstname
-                        );
-                        if (doctorBooking) {
-                          switch (doctorBooking.status) {
-                            case "pending":
-                              return "Pending";
-                            case "canceled":
-                              return "Rejected";
-                            case "confirmed":
-                              return "Booked";
-                            default:
-                              return "Unknown Status"; // Default case
+                        if (userData) {
+                          const doctorBooking = isBooked.find(
+                            (booking: Booking) =>
+                              booking.doctor.firstname === doctor.firstname &&
+                              booking.userId === userData._id
+                          );
+                          if (doctorBooking) {
+                            switch (doctorBooking.status) {
+                              case "pending":
+                                return "Pending";
+                              case "canceled":
+                                return "Rejected";
+                              case "confirmed":
+                                return "Booked";
+                              default:
+                                return "Unknown Status";
+                            }
                           }
                         }
                         return selectedDoctor === doctor
                           ? "Selected"
                           : "Assign Doctor";
                       })()}
-                    </Button> */}
-
-<Button
-  onClick={() => {
-    if (userData) { 
-      const doctorBooking = isBooked.find(
-        (booking: Booking) =>
-          booking.doctor.firstname === doctor.firstname &&
-          booking.userId === userData._id 
-      );
-
-      if (doctorBooking) {
-        setCancelDoctor(doctor.email);
-        setIsBookedModalVisible(true);
-      } else {
-        handleDoctorSelection(doctor);
-      }
-    }
-
-    // handleDoctorSelection(doctor);
-  }}
-  className={`${(() => {
-    if (userData) {
-      const doctorBooking = isBooked.find(
-        (booking: Booking) =>
-          booking.doctor.firstname === doctor.firstname &&
-          booking.userId === userData._id 
-      );
-      if (doctorBooking) {
-        switch (doctorBooking.status) {
-          case "pending":
-            return "bg-orange-500 hover:bg-orange-600";
-          case "canceled":
-            return "bg-slate-700  hover:bg-tan-400";
-          case "confirmed":
-            return "bg-red-500 hover:bg-red-600";
-          default:
-            return "bg-gray-500 hover:bg-gray-600";
-        }
-      }
-    }
-    return selectedDoctor === doctor
-      ? "bg-yellow-500 hover:bg-yellow-600"
-      : "bg-green-500 hover:bg-green-600";
-  })()} text-white px-3 lg:px-4 py-2 lg:py-3 rounded-full text-xs font-medium transition duration-300 ease-in-out shadow-md`}
->
-  {(() => {
-    if (userData) {
-      const doctorBooking = isBooked.find(
-        (booking: Booking) =>
-          booking.doctor.firstname === doctor.firstname &&
-          booking.userId === userData._id
-      );
-      if (doctorBooking) {
-        switch (doctorBooking.status) {
-          case "pending":
-            return "Pending";
-          case "canceled":
-            return "Rejected";
-          case "confirmed":
-            return "Booked";
-          default:
-            return "Unknown Status";
-        }
-      }
-    }
-    return selectedDoctor === doctor
-      ? "Selected"
-      : "Assign Doctor";
-  })()}
-</Button>
-
+                    </Button>
 
                     <Modal
                       visible={isBookedModalVisible}

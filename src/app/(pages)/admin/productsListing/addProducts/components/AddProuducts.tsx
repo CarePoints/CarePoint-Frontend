@@ -48,7 +48,7 @@ const AddProductPage = () => {
 
     const formDataToSend = new FormData();
 
-    // Append form fields
+
     for (const key in formData) {
       if (formData.hasOwnProperty(key)) {
         formDataToSend.append(key, formData[key as keyof typeof formData]);

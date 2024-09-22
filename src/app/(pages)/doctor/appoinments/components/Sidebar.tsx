@@ -50,9 +50,9 @@ export function SidebarDemo() {
     },
     {
       label:(
-        <span className="text-white dark:text-neutral-200">Setting</span>
+        <span className="text-white dark:text-neutral-200">Chat</span>
       ),
-      href: "/doctor/settings",
+      href: "/doctor/chat",
       icon: (
         <IconSettings className="text-white dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
@@ -112,7 +112,6 @@ export function SidebarDemo() {
     
        <div className="flex-1 overflow-auto">
   <Appoinments />
-  {/* <DoctorVideoCall/> */}
 
 </div>
     </div>
