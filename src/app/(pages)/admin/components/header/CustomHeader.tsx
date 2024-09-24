@@ -12,9 +12,6 @@ const CustomHeader = ({ currentPage }: any) => {
 
   const handleNavigation = (page: string) => {
     switch (page) {
-      case 'dashboard':
-        router.push('/admin/dashboard');
-        break;
       case 'users':
         router.push('/admin/userManagement');
         break;
@@ -24,6 +21,10 @@ const CustomHeader = ({ currentPage }: any) => {
       case 'productsListing':
         router.push('/admin/productsListing');
         break;
+      case 'orderManagment':
+        router.push('/admin/orderManagment');
+        break;
+      
     }
   };
 
@@ -58,12 +59,7 @@ const CustomHeader = ({ currentPage }: any) => {
       
       {/* Navigation Menu */}
       <div className={`absolute bg-white px-[30px] py-[14px] top-20 rounded-full flex flex-row gap-4 md:gap-16 animate__animated animate__jackInTheBox ${isMenuOpen ? 'block w-full md:w-auto px-4 md:px-[80px] py-4 md:py-[15px] bg-white' : 'hidden'} md:flex items-center justify-center`}>
-        <div 
-          className={`px-8 py-2 rounded-full ${currentPage === 'dashboard' ? 'bg-blue-500' : 'bg-violet-600'}`}
-          onClick={() => handleNavigation('dashboard')}
-        >
-          <h1 className="text-[13px] text-white">Dashboard</h1>
-        </div>
+   
         <div 
           className={`px-8 py-2 rounded-full ${currentPage === 'users' ? 'bg-blue-500' : 'bg-violet-600'}`}
           onClick={() => handleNavigation('users')}
@@ -81,6 +77,12 @@ const CustomHeader = ({ currentPage }: any) => {
           onClick={() => handleNavigation('productsListing')}
         >
           <h1 className="text-[13px] text-white">Products</h1>
+        </div>
+        <div 
+          className={`px-8 py-2 rounded-full ${currentPage === 'orderManagment' ? 'bg-blue-500' : 'bg-violet-600'}`}
+          onClick={() => handleNavigation('orderManagment')}
+        >
+          <h1 className="text-[13px] text-white">Order Managment</h1>
         </div>
 
       </div>

@@ -1,17 +1,44 @@
 
-
 'use client';
 import { useState, useEffect } from 'react';
 import { ShoppingCart, Plus, Minus, Trash2 } from 'lucide-react';
 import axiosInstance from '@/app/hooks/useApi';
 import { useRouter } from 'next/navigation';
 import ModalComponent from './ModalComponent'
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 
+interface CartItem {
+  productName: string;
+  price: number;
+  quantity: number;
+  dosage?: string;
+  expiryDate?: string;
+  image?: string[];
+  sideEffects?: string;
+  status?: string;
+  totalPrice?: number;
+  userid?: string;
+  _id: string;
+}
 
 const AddToCartPage = () => {
   const [cartItems, setCartItems] = useState<any[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const router = useRouter();
+
+  const prescriptionData = useSelector((state:RootState) => state.search.prescriptionData);
+
+  useEffect(() => {
+    if(prescriptionData) {
+      console.log('prescriptionData in cart side', prescriptionData.medications);
+      console.log('cartItems in cart side', cartItems);
+      checkPrescriptionMatch(prescriptionData.medications, cartItems);
+      setIsModalOpen(false); // Close the modal after prescription upload
+    }
+  }, [prescriptionData, cartItems]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -28,6 +55,25 @@ const AddToCartPage = () => {
 
     fetchProducts();
   }, []);
+
+  const checkPrescriptionMatch = (prescriptionData: string[], cartItems: CartItem[]): void => {
+    if (!prescriptionData || !cartItems) return;
+  
+    let allVerified = true;
+    for (const cartItem of cartItems) {
+      const isInPrescription = prescriptionData.includes(cartItem.productName);
+  
+      if (isInPrescription) {
+        console.log(`The medicine ${cartItem.productName} is in the prescription.`);
+      } else {
+        console.log(`The medicine ${cartItem.productName} is NOT in the prescription.`);
+        allVerified = false;
+        setErrorMessage(`The medicine ${cartItem.productName} is NOT in the prescription.`);
+        break;
+      }
+    }
+    setIsVerified(allVerified);
+  };
 
   const updateQuantity = async (id: string, newQuantity: number) => {
     if (newQuantity < 0) return;
@@ -66,8 +112,11 @@ const AddToCartPage = () => {
   }, 0);
 
   const handleCheckout = () => {
-    setIsModalOpen(true);
-    // router.push('/user/MedicalStore/Checkout');
+    if (isVerified) {
+      router.push('/user/MedicalStore/Checkout');
+    } else {
+      setIsModalOpen(true);
+    }
   };
 
   return (
@@ -76,6 +125,11 @@ const AddToCartPage = () => {
         <ShoppingCart className="mr-2 text-blue-600" size={32} />
         <h2 className="text-3xl font-bold text-gray-900">Your Cart</h2>
       </div>
+      {errorMessage && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+          <span className="block sm:inline">{errorMessage}</span>
+        </div>
+      )}
       <div className="border-t border-gray-200">
         {cartItems.length === 0 ? (
           <div className="text-center py-8">
@@ -88,7 +142,7 @@ const AddToCartPage = () => {
                 <div className="flex items-center">
                   <img
                     className="h-20 w-20 rounded-md object-cover"
-                    src={item.image[0]} // Assuming image is an array with at least one URL
+                    src={item.image[0]}
                     alt={item.productName}
                   />
                   <div className="ml-4">
@@ -131,13 +185,16 @@ const AddToCartPage = () => {
       {cartItems.length > 0 && (
         <button
           onClick={handleCheckout}
-          className="mt-4 w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-150 ease-in-out"
+          className={`mt-4 w-full text-white py-2 px-4 rounded-md transition duration-150 ease-in-out ${
+            isVerified 
+              ? "bg-green-600 hover:bg-green-700" 
+              : "bg-yellow-600 hover:bg-yellow-700"
+          }`}
         >
-          Proceed to Checkout
+          {isVerified ? "Proceed to Checkout" : "Add Prescription"}
         </button>
       )}
-           <ModalComponent isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-
+      <ModalComponent isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 };

@@ -15,6 +15,13 @@ interface SearchState {
   doctorData: any[]
   appoinmentData: Record<string, any> | null; 
   messageDoctor: any | null;
+  prescriptionData: PrescriptionData | null; 
+}
+
+interface PrescriptionData {
+  patientName: string;
+  patientEmail: string;
+  medications: string[];
 }
 
 const initialState: SearchState = {
@@ -25,7 +32,7 @@ const initialState: SearchState = {
   doctorData:[],
   appoinmentData: null,
   messageDoctor: null,
-  
+  prescriptionData: null,
 }
 
 const yourSlice = createSlice({
@@ -53,10 +60,13 @@ const yourSlice = createSlice({
     },
     setDoctorForMessage(state, action: PayloadAction<Doctor | null>) {
       state.messageDoctor = action.payload;
-    }
+    },
+    setPrescriptionData(state, action: PayloadAction<PrescriptionData>) {
+      state.prescriptionData = action.payload;
+    },
   },
 });
 
 
-export const {setDoctorSearchValue, setLocationSearchValue, setSelectedSearchType,setFilters ,setDoctorData,setAppoinmentData,setDoctorForMessage} = yourSlice.actions;
+export const {setDoctorSearchValue, setLocationSearchValue, setSelectedSearchType,setFilters ,setDoctorData,setAppoinmentData,setDoctorForMessage,setPrescriptionData} = yourSlice.actions;
 export default yourSlice.reducer;

@@ -50,7 +50,7 @@ const ToggleButton: React.FC<ToggleButtonProps> = ({ email }) => {
   return (
     <button
       onClick={handleClick}
-      className={`text-white py-2 px-4 rounded-full ${buttonColor} ${hoverColor}`}
+      className={`text-white py-2 px-4 rounded-full absolute ml-[370px] ${buttonColor} ${hoverColor}`}
     >
       {isBlocked ? 'Unblock' : 'Block'}
     </button>

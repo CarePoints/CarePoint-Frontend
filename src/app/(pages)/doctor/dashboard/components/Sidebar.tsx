@@ -106,9 +106,9 @@ export function SidebarDemo() {
     },
     {
       label:(
-        <span className="text-white dark:text-neutral-200">Setting</span>
+        <span className="text-white dark:text-neutral-200">Chat</span>
       ),
-      href: "/doctor/settings",
+      href: "/doctor/chat",
       icon: (
         <IconSettings className="text-white dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
@@ -209,7 +209,7 @@ const Dashboard = () => {
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-10 flex-1">
           <div
             key="first-array"
-            className="h-[200px] lg:h-[300px] w-full lg:w-[50%] rounded-lg bg-[#0E0A3C]"
+            className="h-[200px] lg:h-[300px] w-full lg:w-[80%] rounded-lg bg-[#0E0A3C]"
           >
             <h1 className="text-white font-bold relative left-4 top-4 text-[20px] ">
               Total Appoinment
@@ -218,7 +218,7 @@ const Dashboard = () => {
 
           </div>
 
-          <div
+          {/* <div
             key="second-array"
             className="h-[200px] lg:h-[300px] w-full lg:w-[50%] rounded-lg bg-[#0E0A3C]"
           >
@@ -226,7 +226,7 @@ const Dashboard = () => {
               Revenue
             </h1>
             <PieChart/>
-          </div>
+          </div> */}
         </div>
 
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-10 flex-1">
@@ -248,27 +248,7 @@ const Dashboard = () => {
             </h1>{" "}
           </div>
 
-          <div
-            key="fifth-array"
-            className="h-[200px] lg:h-[300px] w-full lg:w-[50%] rounded-lg bg-[#0E0A3C] relative overflow-y-scroll "
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          >
-            <h1 className="text-white font-bold absolute left-4 top-4 text-[20px] ">
-              Notification
-            </h1>
-            <div className="relative flex flex-col items-end p-4 h-full ">
-              {Array.from({ length: 5 }).map((_, index) => (
-                <div
-                  key={index}
-                  className={`bg-white rounded-full px-[50%] py-8 w-20 mx-auto ${
-                    index > 0 ? "mt-4" : "mt-14"
-                  }`}
-                >
-                  {/* You can add content here */}
-                </div>
-              ))}
-            </div>
-          </div>
+      
         </div>
       </div>
     </div>

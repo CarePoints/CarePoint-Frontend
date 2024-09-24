@@ -17,19 +17,20 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/app/utils/util";
 import Appoinments from '../components/Appoinments';
+import { MessageCircle } from 'lucide-react';
 // import DoctorVideoCall from '../[appointmentId]';
 
 export function SidebarDemo() {
   const links:any = [
-    {
-      label:(
-        <span className="text-white dark:text-neutral-200">Dashboard</span>
-      ),
-      href: "/doctor/dashboard",
-      icon: (
-        <IconBrandTabler className="text-white dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-      ),
-    },
+    // {
+    //   label:(
+    //     <span className="text-white dark:text-neutral-200">Dashboard</span>
+    //   ),
+    //   href: "/doctor/dashboard",
+    //   icon: (
+    //     <IconBrandTabler className="text-white dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+    //   ),
+    // },
     {
       label:(
         <span className="text-white dark:text-neutral-200">Profile</span>
@@ -54,7 +55,7 @@ export function SidebarDemo() {
       ),
       href: "/doctor/chat",
       icon: (
-        <IconSettings className="text-white dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <MessageCircle className="text-white dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
     {

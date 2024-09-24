@@ -109,6 +109,8 @@
 
 "use client";
 
+
+
 import React, { useEffect, useState } from "react";
 import StatusDropdown from "../../components/Dropdown/StatusDropdown";
 import DateFilterDropdown from "../../components/Dropdown/DateFilterDropdown";
@@ -214,7 +216,7 @@ const UserManagement: React.FC = () => {
             <h2 className="w-1/3">Name</h2>
             <div className="w-2/3 flex justify-between">
               <h2>Email</h2>
-              <h2>Contact</h2>
+              {/* <h2>Contact</h2> */}
               <h2>Status</h2>
               <h2>Action</h2>
             </div>
@@ -239,7 +241,7 @@ const UserManagement: React.FC = () => {
                   </div>
                   <div className="w-2/3 flex justify-between items-center">
                     <p className="text-gray-300">{user.email}</p>
-                    <p className="text-gray-300">{user.phonenumber}</p>
+                    {/* <p className="text-gray-300">{user.phonenumber}</p> */}
                     <ToggleButton email={user.email} />
                     <button
                       className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded"

@@ -92,7 +92,7 @@ const Login = () => {
     try {
       console.log("Login data we are sending:", email, password);
       if(email=='admin123@gmail.com'&&password=='admin123'){
-        router.push("/admin/dashboard");
+        router.push("/admin/userManagement");
         return
       }
       
@@ -127,10 +127,10 @@ const Login = () => {
               router.push("/user/Home");
               break;
             case "doctor":
-              router.push("/doctor/dashboard");
+              router.push("/doctor/profile");
               break;
             default:
-              router.push("/admin");
+              router.push("/admin/userManagement");
           }
         }
       } else if (response.data.result?.error === 'Email is not found') {

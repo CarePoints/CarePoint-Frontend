@@ -118,6 +118,9 @@ const Home = () => {
     return btoa(combinedString);
   };
 
+  const handleProfile = () => {
+    router.push('/user/UserProfile')
+  };
   const hanldeLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -140,13 +143,13 @@ const Home = () => {
               About
             </a>
             <span className="text-black">/</span>
-            <a href="#Services" className="text-black hover:text-gray-700">
+            <a href="#services" className="text-black hover:text-gray-700">
               Services
             </a>
             <span className="text-black">/</span>
-            <a href="#contact" className="text-black hover:text-gray-700">
-              Contact
-            </a>
+            <button onClick={handleProfile} className="text-black hover:text-gray-700">
+              Profile
+            </button>
             <span className="text-black">/</span>
             <a
               href="/login"
@@ -183,7 +186,7 @@ const Home = () => {
         />
       </div>
 
-      <div className="relative bg-[#0067FF] rounded-3xl mt-4 m-3 p-10 flex space-x-10 ">
+      <div className="relative bg-[#0067FF] rounded-3xl mt-4 m-3 p-10 flex space-x-10" id="services">
         <div className="flex items-center">
           <h1 className="text-[26px] font-bold text-white">
             Emergency Services

@@ -8,8 +8,7 @@ const dashboard = () => {
       <div>
 
       </div>
-      {/* <LayoutGridDemo/> */}
-      {/* <MyChart /> */}
+    
       <SidebarDemo/>
     </div>
   )

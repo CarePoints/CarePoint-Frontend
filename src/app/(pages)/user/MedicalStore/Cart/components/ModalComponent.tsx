@@ -1,6 +1,9 @@
+
 import React, { useState } from "react";
-import { X, Upload, Check } from "lucide-react";
+import { X, Upload, Check, FileText } from "lucide-react";
 import axiosInstance from "@/app/hooks/useApi";
+import { useDispatch } from 'react-redux';
+import { setPrescriptionData } from "@/redux/yourSlice";
 
 interface ModalComponentProps {
   isOpen: boolean;
@@ -17,15 +20,18 @@ const PrescriptionUploadModal: React.FC<ModalComponentProps> = ({
   isOpen,
   onClose,
 }) => {
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const [uploadStatus, setUploadStatus] = useState<
     "idle" | "success" | "uploading" | "error"
   >("idle");
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const dispatch = useDispatch();
+
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setSelectedImage(e.target.files[0]);
+      setSelectedFile(e.target.files[0]);
       setUploadStatus("idle");
     }
   };
@@ -45,89 +51,50 @@ const PrescriptionUploadModal: React.FC<ModalComponentProps> = ({
     e.stopPropagation();
     setDragActive(false);
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      setSelectedImage(e.dataTransfer.files[0]);
+      setSelectedFile(e.dataTransfer.files[0]);
       setUploadStatus("idle");
     }
   };
 
-//   const handleSubmit = async () => {
-//     if (selectedImage) {
-//       const formData = new FormData();
-//       formData.append("photo", selectedImage);
-     
-//       const entries = Array.from(formData.entries());
-//       entries.forEach(([key, value]) => {
-//         console.log(key, value);
-//       });
+  const handleSubmit = async () => {
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append("file", selectedFile); 
 
-//       console.log("formData", formData);
+      try {
+        setUploadStatus("uploading");
+        console.log('uploading',formData)
+        console.log('selectedFile',selectedFile)
 
-//       try {
-//         const response = await axiosInstance.post(
-//           "/user-service/upload",
-//           formData
-//         );
-//         //   setUploadStatus('uploading',formData);
-
-//         if (response) {
-//           setUploadStatus("success");
-//           console.log("Uploading prescription:", selectedImage);
-//         } else {
-//           setUploadStatus("error");
-//           console.error("Upload failed");
-//         }
-//       } catch (error) {
-//         setUploadStatus("error");
-//         console.error("Error during upload:", error);
-//       }
-//     }
-//   };
-
-const handleSubmit = async () => {
-    if (selectedImage) {
-        // Convert the image to a Base64 string
-        const reader = new FileReader();
-        reader.readAsDataURL(selectedImage);
-        reader.onloadend = async () => {
-            const base64String = reader.result;
-
-            // Prepare the data to send
-            const dataToSend = {
-                photo: base64String,
-            };
-
-            console.log("Sending Data:", dataToSend);
-
-            try {
-                const response = await axiosInstance.post(
-                    "/user-service/upload",
-                    dataToSend,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                    }
-                );
-
-                if (response) {
-                    setUploadStatus("success");
-                    console.log("Uploading prescription:", selectedImage);
-                } else {
-                    setUploadStatus("error");
-                    console.error("Upload failed");
-                }
-            } catch (error) {
-                setUploadStatus("error");
-                console.error("Error during upload:", error);
+        const response = await axiosInstance.post("/user-service/upload", formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        console.log('uploaded')
+        if (response) {
+          setUploadStatus("success");
+          console.log("Uploading prescription:", response.data);
+          const userData = localStorage.getItem('user');
+          if(userData){
+            const parsedData = JSON.parse(userData);
+            console.log('parsedData',parsedData.email)
+            console.log('response.data.patientEmail',response.data.extractedText.patientEmail)
+            if(parsedData.email==response.data.extractedText.patientEmail){
+              console.log('user is this')
+              dispatch(setPrescriptionData(response.data.extractedText))
             }
-        };
-
-        reader.onerror = (error) => {
-            console.error("Error reading file:", error);
-        };
+          }
+        } else {
+          setUploadStatus("error");
+          console.error("Upload failed");
+        }
+      } catch (error) {
+        setUploadStatus("error");
+        console.error("Error during upload:", error);
+      }
     }
-};
-
+  };
 
   if (!isOpen) return null;
 
@@ -135,13 +102,8 @@ const handleSubmit = async () => {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
       <div className="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden">
         <div className="flex justify-between items-center p-6 bg-blue-50">
-          <h2 className="text-2xl font-bold text-blue-800">
-            Upload Prescription
-          </h2>
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
-          >
+          <h2 className="text-2xl font-bold text-blue-800">Upload Prescription</h2>
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
             <X size={24} />
           </button>
         </div>
@@ -156,27 +118,23 @@ const handleSubmit = async () => {
             onDragOver={handleDrag}
             onDrop={handleDrop}
           >
-            {selectedImage ? (
+            {selectedFile ? (
               <div className="space-y-4">
-                <img
-                  className="mx-auto h-48 w-48 object-cover rounded-lg shadow-md"
-                  src={URL.createObjectURL(selectedImage)}
-                  alt="Selected prescription"
-                />
-                <p className="text-sm text-gray-600">{selectedImage.name}</p>
+                <FileText className="mx-auto h-12 w-12 text-blue-500" />
+                <p className="text-sm text-gray-600">{selectedFile.name}</p>
               </div>
             ) : (
               <div className="space-y-4">
                 <Upload className="mx-auto h-12 w-12 text-blue-500" />
                 <p className="text-gray-600">
-                  Drag and drop your prescription here, or{" "}
+                  Drag and drop your prescription PDF here, or{" "}
                   <label className="text-blue-500 hover:text-blue-600 cursor-pointer">
                     browse
                     <input
                       type="file"
                       className="hidden"
-                      accept="image/*"
-                      onChange={handleImageChange}
+                      accept="application/pdf"
+                      onChange={handleFileChange}
                     />
                   </label>
                 </p>
@@ -200,9 +158,9 @@ const handleSubmit = async () => {
             </button>
             <button
               onClick={handleSubmit}
-              disabled={!selectedImage || uploadStatus === "success"}
+              disabled={!selectedFile || uploadStatus === "success"}
               className={`px-4 py-2 rounded-md text-white transition-colors ${
-                selectedImage && uploadStatus !== "success"
+                selectedFile && uploadStatus !== "success"
                   ? "bg-blue-500 hover:bg-blue-600"
                   : "bg-gray-300 cursor-not-allowed"
               }`}
@@ -217,3 +175,4 @@ const handleSubmit = async () => {
 };
 
 export default PrescriptionUploadModal;
+

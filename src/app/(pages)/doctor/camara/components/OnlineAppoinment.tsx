@@ -16,6 +16,7 @@ import {
 import io, { Socket } from "socket.io-client";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
+import ModalComponent from './PrescriptionUploadModal'
 
 interface Doctor {
   _id: string;
@@ -46,6 +47,7 @@ interface Doctor {
 
 interface User {
   id: string;
+  userName:string;
   email: string;
 }
 const DoctorVideoCall = () => {
@@ -60,6 +62,8 @@ const DoctorVideoCall = () => {
     []
   );
   const [callDuration, setCallDuration] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [patientQueue, setPatientQueue] = useState([
     "John Doe",
     "Jane Smith",
@@ -220,8 +224,13 @@ const DoctorVideoCall = () => {
   }, [isCallActive]);
 
   const startCall = async () => {
-    console.log("doctor is", doctor?.email);
-    console.log("user is", appoinmentData.user.email);
+    console.log('user',appoinmentData.user)
+    const userObj = {
+      id:appoinmentData.user._id,
+      userName: appoinmentData.user.firstname + appoinmentData.user.lastname,
+      email: appoinmentData.user.email
+    }
+    setUser(userObj)
     let doctorEmail = doctor?.email;
     let userEmail = appoinmentData.user.email;
     const roomId = generateRoomId(doctorEmail, userEmail);
@@ -283,6 +292,11 @@ const DoctorVideoCall = () => {
       .padStart(2, "0")}`;
   };
 
+  const handlePrescription = ()=>{
+    setIsModalOpen(true)
+    console.log('handlePrescription')
+  }
+
   return (
     <div className="flex h-screen bg-[#0E0A3C]">
       {/* Sidebar */}
@@ -300,21 +314,14 @@ const DoctorVideoCall = () => {
             <Camera className="mr-3 h-5 w-5" />
             Video Call
           </a>
-          <a
-            href="#"
+        </nav>
+          <button
             className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200"
+            onClick={handlePrescription}
           >
             <Users className="mr-3 h-5 w-5" />
             Add Prescription
-          </a>
-          <a
-            href="#"
-            className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200"
-          >
-            <Settings className="mr-3 h-5 w-5" />
-            Settings
-          </a> 
-        </nav>
+          </button>
       </div>
 
       {/* Main Content */}
@@ -422,6 +429,16 @@ const DoctorVideoCall = () => {
           </div>
         </footer>
       </div>
+      {user && (
+  <ModalComponent
+    isOpen={isModalOpen}
+    onClose={() => setIsModalOpen(false)}
+    doctorName={`${doctor?.firstname} ${doctor?.lastname}`}
+    userData={user}
+  />
+)}
+
+
     </div>
   );
 };

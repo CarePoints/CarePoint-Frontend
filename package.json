@@ -39,6 +39,8 @@
     "dayjs": "^1.11.13",
     "echarts": "^5.5.1",
     "framer-motion": "^11.3.28",
+    "jspdf": "^2.5.2",
+    "jspdf-autotable": "^3.8.3",
     "leaflet": "^1.9.4",
     "leaflet-routing-machine": "^3.2.12",
     "lucide-react": "^0.416.0",
