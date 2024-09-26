@@ -28,20 +28,31 @@
       "static/chunks/main-app.js",
       "static/chunks/app/(pages)/user/Appointments/page.js"
     ],
+    "/(pages)/(auth)/signup/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(pages)/(auth)/signup/page.js"
+    ],
+    "/(pages)/(auth)/otp/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(pages)/(auth)/otp/page.js"
+    ],
+    "/(pages)/(auth)/doctorVerification/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(pages)/(auth)/doctorVerification/page.js"
+    ],
     "/(pages)/doctor/profile/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(pages)/doctor/profile/page.js"
     ],
-    "/(pages)/user/Appointments/chat/page": [
+    "/(pages)/user/Appointments/map/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(pages)/user/Appointments/chat/page.js"
-    ],
-    "/(pages)/doctor/chat/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(pages)/doctor/chat/page.js"
+      "static/css/app/(pages)/user/Appointments/map/page.css",
+      "static/chunks/app/(pages)/user/Appointments/map/page.js"
     ],
     "/(pages)/doctor/appoinments/page": [
       "static/chunks/webpack.js",
@@ -63,6 +74,21 @@
       "static/chunks/main-app.js",
       "static/css/app/(pages)/user/Appointments/camara/layout.css",
       "static/chunks/app/(pages)/user/Appointments/camara/layout.js"
+    ],
+    "/(pages)/user/MedicalStore/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(pages)/user/MedicalStore/page.js"
+    ],
+    "/(pages)/user/MedicalStore/Cart/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(pages)/user/MedicalStore/Cart/page.js"
+    ],
+    "/(pages)/user/MedicalStore/Checkout/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(pages)/user/MedicalStore/Checkout/page.js"
     ],
     "/_not-found/page": [
       "static/chunks/webpack.js",

@@ -75,12 +75,12 @@ const Header = () => {
               className="w-auto h-16"
             />
           </div>
-          {['Home', 'About', 'Services', 'Contact'].map((item, index) => (
+          {['Home', 'About', 'Services', 'UserProfile'].map((item, index) => (
             <React.Fragment key={item}>
               <a 
                 href={  item === 'Home' ? '/user/Home' :
                   item === 'About' ? '/user/Home#about' :
-                  item === 'Contact' ? '/user/Home#contact' : `#${item.toLowerCase()}`}
+                  item === 'UserProfile' ? '/user/UserProfile' : `#${item.toLowerCase()}`}
                 className="block text-xl md:text-base font-semibold hover:text-gray-300 md:hover:text-gray-700 transition duration-300 ease-in-out relative group"
                 onClick={() => setIsMenuOpen(false)}
               >

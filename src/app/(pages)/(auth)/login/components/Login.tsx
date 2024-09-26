@@ -35,8 +35,6 @@ const Login = () => {
     const tokenData = query.get("token");
 
     if (userData && tokenData) {
-      // Decode and parse user data
-      console.log('asaaaaaaaaaaaaaa');
       
       const user: User = JSON.parse(decodeURIComponent(userData));
       

@@ -1,10 +1,10 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
-  "/(pages)/doctor/chat/page": "app/(pages)/doctor/chat/page.js",
   "/(pages)/doctor/appoinments/page": "app/(pages)/doctor/appoinments/page.js",
   "/(pages)/doctor/camara/page": "app/(pages)/doctor/camara/page.js",
   "/(pages)/user/Home/page": "app/(pages)/user/Home/page.js",
-  "/(pages)/user/Appointments/chat/page": "app/(pages)/user/Appointments/chat/page.js",
-  "/(pages)/user/Appointments/page": "app/(pages)/user/Appointments/page.js",
+  "/(pages)/user/MedicalStore/page": "app/(pages)/user/MedicalStore/page.js",
+  "/(pages)/user/MedicalStore/Cart/page": "app/(pages)/user/MedicalStore/Cart/page.js",
+  "/(pages)/user/MedicalStore/Checkout/page": "app/(pages)/user/MedicalStore/Checkout/page.js",
   "/(pages)/user/Appointments/camara/page": "app/(pages)/user/Appointments/camara/page.js"
 }

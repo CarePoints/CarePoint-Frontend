@@ -84,12 +84,14 @@ const Appointments: React.FC = () => {
     setSelectedAppointment(appointment);
     setActionType("accept");
     setShowModal(true);
+    // window.location.reload()
   };
 
   const handleRejectClick = (appointment: Appointment) => {
     setSelectedAppointment(appointment);
     setActionType("reject");
     setShowModal(true);
+    // window.location.reload()
   };
 
   const handleConfirm = async () => {

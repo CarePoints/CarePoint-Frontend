@@ -55,7 +55,7 @@ export const OrderManagementPage: React.FC = () => {
 
             const orders = productData.map((product: any) => ({
               id: product._id,
-              customer: product.customerName || 'Unknown Customer', // Use the correct field from the API or fallback
+              customer: product.address.userName || 'Unknown Customer', // Use the correct field from the API or fallback
               date: product.orderDate,
               status: product.status,
               total: product.totalPrice,
